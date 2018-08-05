@@ -42,7 +42,8 @@ class VARS_EXPORT vars::Vars {
   CLASS* get(std::string const& n) const;
   template <typename CLASS>
   CLASS* getReinterpret(std::string const& n) const;
-
+  template <typename CLASS,typename... ARGS>
+  CLASS* reCreate(std::string const&n,ARGS&&... args);
  private:
   void checkTypes(std::string const& n, std::type_info const& t) const;
   friend class VarsImpl;
@@ -67,7 +68,15 @@ CLASS* vars::Vars::getReinterpret(std::string const& n) const {
   return reinterpret_cast<CLASS*>(get(n));
 }
 
+template <typename CLASS,typename... ARGS>
+CLASS* vars::Vars::reCreate(std::string const&n,ARGS&&... args){
+  void* data = new CLASS{args...};
+  auto r = reCreate(n,data,getDestructor<CLASS>(),typeid(CLASS));
+  return reinterpret_cast<CLASS*>(r);
+}
+
 template <typename T>
 inline vars::Destructor vars::getDestructor() {
   return [](void* ptr) { delete reinterpret_cast<T*>(ptr); };
 }
+
