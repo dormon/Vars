@@ -3,7 +3,7 @@
 using namespace vars;
 using namespace std;
 
-vars::Resource::Resource(void* d, Destructor const& dst, type_info const& t)
+vars::Resource::Resource(void* d, Destructor const& dst, type_info const&t)
     : data(d), destructor(dst), type(t) {}
 
 vars::Resource::~Resource() { destructor(data); }
@@ -22,3 +22,11 @@ void vars::Resource::setChangeCallback(OnChange const& clb) {
 }
 
 void* vars::Resource::getData() const { return data; }
+
+void* vars::Resource::reCreate(void*d,Destructor const&dst,std::type_info const&t){
+  destructor(data);
+  auto const oldTicks = ticks;
+  new(this)Resource(d,dst,t);
+  ticks = oldTicks;
+  updateTicks();
+}

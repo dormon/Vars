@@ -20,6 +20,7 @@ class vars::VarsImpl {
   void             ifVarDoesNotExistThrow(string const& n) const;
   ~VarsImpl();
   void* get(string const& n) const;
+  void* reCreate(string const&n,void*d,Destructor const&dst,type_info const&t);
 
   template <typename T>
   T& add(string const& n, T const& v);

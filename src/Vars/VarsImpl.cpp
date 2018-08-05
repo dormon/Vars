@@ -30,6 +30,12 @@ void* VarsImpl::get(string const& n) const {
   return data.at(n)->getData();
 }
 
+void* VarsImpl::reCreate(string const&n,void*d,Destructor const&dst,type_info const&t){
+  if(!has(n))
+    return add(n,d,dst,t);
+  data[n]->reCreate(d,dst,t);
+}
+
 void VarsImpl::erase(string const& n) {
   data.erase(n);
   auto id = nameToId[n];

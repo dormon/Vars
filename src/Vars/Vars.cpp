@@ -80,6 +80,10 @@ std::type_info const& Vars::getType(std::string const& n) const {
   return impl->getType(n);
 }
 
+void* Vars::reCreate(std::string const&n,void*d,Destructor const&dst,std::type_info const&t){
+  return impl->reCreate(n,d,dst,t);
+}
+
 void Vars::checkTypes(std::string const& n, std::type_info const& t) const {
   impl->checkTypes(n, t);
 }

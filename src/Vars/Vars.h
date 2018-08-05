@@ -35,6 +35,7 @@ class VARS_EXPORT vars::Vars {
   size_t                    getNofVars() const;
   std::string               getVarName(size_t i) const;
   std::type_info const&     getType(std::string const& n) const;
+  void* reCreate(std::string const&n,void*d,Destructor const&dst,std::type_info const&t);
   template <typename CLASS, typename... ARGS>
   CLASS* add(std::string const& n, ARGS&&... args);
   template <typename CLASS>

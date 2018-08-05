@@ -5,13 +5,14 @@
 
 class VARS_EXPORT vars::Resource {
  public:
-  Resource(void* d, Destructor const& dst, std::type_info const& t);
+  Resource(void* d, Destructor const& dst, std::type_info const&t);
   ~Resource();
   void                  updateTicks();
   size_t                getTicks() const;
   std::type_info const& getType() const;
   void                  setChangeCallback(OnChange const& clb);
   void*                 getData() const;
+  void*                 reCreate(void*d,Destructor const&dst,std::type_info const&t);
 
  private:
   void*                 data;
