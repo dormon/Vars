@@ -35,15 +35,19 @@ class VARS_EXPORT vars::Vars {
   size_t                    getNofVars() const;
   std::string               getVarName(size_t i) const;
   std::type_info const&     getType(std::string const& n) const;
-  void* reCreate(std::string const&n,void*d,Destructor const&dst,std::type_info const&t);
+  void*                     reCreate(std::string const&    n,
+                                     void*                 d,
+                                     Destructor const&     dst,
+                                     std::type_info const& t);
   template <typename CLASS, typename... ARGS>
   CLASS* add(std::string const& n, ARGS&&... args);
   template <typename CLASS>
   CLASS* get(std::string const& n) const;
   template <typename CLASS>
   CLASS* getReinterpret(std::string const& n) const;
-  template <typename CLASS,typename... ARGS>
-  CLASS* reCreate(std::string const&n,ARGS&&... args);
+  template <typename CLASS, typename... ARGS>
+  CLASS* reCreate(std::string const& n, ARGS&&... args);
+
  private:
   void checkTypes(std::string const& n, std::type_info const& t) const;
   friend class VarsImpl;
@@ -51,32 +55,36 @@ class VARS_EXPORT vars::Vars {
 };
 
 template <typename CLASS, typename... ARGS>
-CLASS* vars::Vars::add(std::string const& n, ARGS&&... args) {
-  void* data = new CLASS{args...};
+CLASS* vars::Vars::add(std::string const& n, ARGS&&... args)
+{
+  void* data = new CLASS(args...);
   auto  r    = add(n, data, getDestructor<CLASS>(), typeid(CLASS));
   return reinterpret_cast<CLASS*>(r);
 }
 
 template <typename CLASS>
-CLASS* vars::Vars::get(std::string const& n) const {
+CLASS* vars::Vars::get(std::string const& n) const
+{
   checkTypes(n, typeid(CLASS));
   return reinterpret_cast<CLASS*>(get(n));
 }
 
 template <typename CLASS>
-CLASS* vars::Vars::getReinterpret(std::string const& n) const {
+CLASS* vars::Vars::getReinterpret(std::string const& n) const
+{
   return reinterpret_cast<CLASS*>(get(n));
 }
 
-template <typename CLASS,typename... ARGS>
-CLASS* vars::Vars::reCreate(std::string const&n,ARGS&&... args){
-  void* data = new CLASS{args...};
-  auto r = reCreate(n,data,getDestructor<CLASS>(),typeid(CLASS));
+template <typename CLASS, typename... ARGS>
+CLASS* vars::Vars::reCreate(std::string const& n, ARGS&&... args)
+{
+  void* data = new CLASS(args...);
+  auto  r    = reCreate(n, data, getDestructor<CLASS>(), typeid(CLASS));
   return reinterpret_cast<CLASS*>(r);
 }
 
 template <typename T>
-inline vars::Destructor vars::getDestructor() {
+inline vars::Destructor vars::getDestructor()
+{
   return [](void* ptr) { delete reinterpret_cast<T*>(ptr); };
 }
-

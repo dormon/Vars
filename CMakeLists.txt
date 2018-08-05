@@ -41,6 +41,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURR
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
+option(${PROJECT_NAME}_BUILD_TESTS "toggle building of unit tests")
+if(${PROJECT_NAME}_BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
+
 set(PROJECT_NAME_LOWER)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
