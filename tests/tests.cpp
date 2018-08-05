@@ -2,6 +2,7 @@
 #include<Vars/Resource.h>
 #include<iostream>
 #include<fstream>
+#include<memory>
 
 #define CATCH_CONFIG_MAIN
 #include<catch.hpp>
@@ -50,4 +51,49 @@ SCENARIO("Custom object"){
   Vars vars;
   vars.add<Object>("obj",10);
   vars.erase("obj");
+}
+
+class Base{
+  public:
+    Base(Vars&vars):vars(vars){}
+    virtual ~Base(){}
+    Vars&vars;
+};
+
+class Child: public Base{
+  public:
+    Child(Vars&vars):Base(vars){
+      vars.addBool("asdasd",false);
+    }
+    virtual ~Child(){
+      vars.erase("asdasd");
+    }
+};
+
+SCENARIO("Vars in child object"){
+  Vars vars;
+  REQUIRE(vars.has("asdasd") == false);
+  auto c = make_unique<Child>(vars);
+  REQUIRE(vars.has("asdasd") == true);
+  c = nullptr;
+  REQUIRE(vars.has("asdasd") == false);
+}
+
+SCENARIO("Vars in child object, child object in vars"){
+  Vars vars;
+  REQUIRE(vars.has("asdasd") == false);
+  vars.add<Child>("child",vars);
+  REQUIRE(vars.has("asdasd") == true);
+  REQUIRE(vars.has("child") == true);
+  vars.erase("child");
+  REQUIRE(vars.has("asdasd") == false);
+  REQUIRE(vars.has("child") == false);
+}
+
+SCENARIO("Vars in child object, child object in vars, default destructor"){
+  Vars vars;
+  REQUIRE(vars.has("asdasd") == false);
+  vars.add<Child>("child",vars);
+  REQUIRE(vars.has("asdasd") == true);
+  REQUIRE(vars.has("child") == true);
 }

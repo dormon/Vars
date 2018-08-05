@@ -1,5 +1,6 @@
 #include <Vars/VarsImpl.h>
 #include <Vars/Resource.h>
+#include <vector>
 
 using namespace vars;
 
@@ -37,7 +38,6 @@ void* VarsImpl::reCreate(string const&n,void*d,Destructor const&dst,type_info co
 }
 
 void VarsImpl::erase(string const& n) {
-  data[n] = nullptr;
   data.erase(n);
   auto id = nameToId[n];
   nameToId.erase(n);
@@ -55,4 +55,10 @@ void VarsImpl::checkTypes(string const& n, type_info const& t) {
   throw runtime_error(string("variable: ") + n + " has different type");
 }
 
-VarsImpl::~VarsImpl() {}
+VarsImpl::~VarsImpl() {
+  std::vector<std::string>names;
+  for(auto const&x:nameToId)
+    names.push_back(x.first);
+  for(auto const&x:names)
+    erase(x);
+}
