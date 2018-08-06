@@ -35,6 +35,14 @@ SCENARIO("Recreate tests"){
   REQUIRE(vars.getFloat("var") == 1.3f);
 }
 
+SCENARIO("Recreate tests, return value"){
+  Vars vars;
+  auto ptr = vars.reCreate("a",(void*)17,[](void*){},typeid(float));
+  REQUIRE(ptr == (void*)17);
+  ptr = vars.reCreate("a",(void*)9223,[](void*){},typeid(float));
+  REQUIRE(ptr == (void*)9223);
+}
+
 class Object{
   public:
     Object(size_t n){

@@ -29,4 +29,5 @@ void* vars::Resource::reCreate(void*d,Destructor const&dst,std::type_info const&
   new(this)Resource(d,dst,t);
   ticks = oldTicks;
   updateTicks();
+  return d;
 }
