@@ -7,35 +7,35 @@
 #include <Vars/Fwd.h>
 #include <Vars/vars_export.h>
 
-class VARS_EXPORT vars::Vars {
+class vars::Vars {
  public:
-  Vars();
-  ~Vars();
-  void*        add(std::string const&    n,
-                   void*                 d,
-                   Destructor const&     dst,
-                   std::type_info const& t);
-  bool&        addBool(std::string const& n, bool v = false);
-  std::string& addString(std::string const& n, std::string const& v = "");
-  size_t&      addSizeT(std::string const& n, size_t v = 0);
-  float&       addFloat(std::string const& n, float v = 0.f);
-  uint32_t&    addUint32(std::string const& n, uint32_t v = 0);
-  void*        get(std::string const& n) const;
-  std::string& getString(std::string const& n) const;
-  bool&        getBool(std::string const& n) const;
-  size_t&      getSizeT(std::string const& n) const;
-  float&       getFloat(std::string const& n) const;
-  uint32_t&    getUint32(std::string const& n) const;
-  void         erase(std::string const& n);
-  bool         has(std::string const& n) const;
-  void         updateTicks(std::string const& n);
-  size_t       getTicks(std::string const& n) const;
-  void         setChangeCallback(std::string const& n, OnChange const& clb);
-  std::shared_ptr<Resource> getResource(std::string const& n) const;
-  size_t                    getNofVars() const;
-  std::string               getVarName(size_t i) const;
-  std::type_info const&     getType(std::string const& n) const;
-  void*                     reCreate(std::string const&    n,
+  VARS_EXPORT Vars();
+  VARS_EXPORT ~Vars();
+  VARS_EXPORT void*        add(std::string const&    n,
+                               void*                 d,
+                               Destructor const&     dst,
+                               std::type_info const& t);
+  VARS_EXPORT bool&        addBool(std::string const& n, bool v = false);
+  VARS_EXPORT std::string& addString(std::string const& n, std::string const& v = "");
+  VARS_EXPORT size_t&      addSizeT(std::string const& n, size_t v = 0);
+  VARS_EXPORT float&       addFloat(std::string const& n, float v = 0.f);
+  VARS_EXPORT uint32_t&    addUint32(std::string const& n, uint32_t v = 0);
+  VARS_EXPORT void*        get(std::string const& n) const;
+  VARS_EXPORT std::string& getString(std::string const& n) const;
+  VARS_EXPORT bool&        getBool(std::string const& n) const;
+  VARS_EXPORT size_t&      getSizeT(std::string const& n) const;
+  VARS_EXPORT float&       getFloat(std::string const& n) const;
+  VARS_EXPORT uint32_t&    getUint32(std::string const& n) const;
+  VARS_EXPORT void         erase(std::string const& n);
+  VARS_EXPORT bool         has(std::string const& n) const;
+  VARS_EXPORT void         updateTicks(std::string const& n);
+  VARS_EXPORT size_t       getTicks(std::string const& n) const;
+  VARS_EXPORT void         setChangeCallback(std::string const& n, OnChange const& clb);
+  VARS_EXPORT std::shared_ptr<Resource> getResource(std::string const& n) const;
+  VARS_EXPORT size_t                    getNofVars() const;
+  VARS_EXPORT std::string               getVarName(size_t i) const;
+  VARS_EXPORT std::type_info const&     getType(std::string const& n) const;
+  VARS_EXPORT void*                     reCreate(std::string const&    n,
                                      void*                 d,
                                      Destructor const&     dst,
                                      std::type_info const& t);

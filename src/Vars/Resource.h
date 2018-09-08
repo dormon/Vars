@@ -3,16 +3,16 @@
 #include <Vars/Fwd.h>
 #include <Vars/vars_export.h>
 
-class VARS_EXPORT vars::Resource {
+class vars::Resource {
  public:
-  Resource(void* d, Destructor const& dst, std::type_info const&t);
-  ~Resource();
-  void                  updateTicks();
-  size_t                getTicks() const;
-  std::type_info const& getType() const;
-  void                  setChangeCallback(OnChange const& clb);
-  void*                 getData() const;
-  void*                 reCreate(void*d,Destructor const&dst,std::type_info const&t);
+  VARS_EXPORT Resource(void* d, Destructor const& dst, std::type_info const&t);
+  VARS_EXPORT ~Resource();
+  VARS_EXPORT void                  updateTicks();
+  VARS_EXPORT size_t                getTicks() const;
+  VARS_EXPORT std::type_info const& getType() const;
+  VARS_EXPORT void                  setChangeCallback(OnChange const& clb);
+  VARS_EXPORT void*                 getData() const;
+  VARS_EXPORT void*                 reCreate(void*d,Destructor const&dst,std::type_info const&t);
 
  private:
   void*                 data;
