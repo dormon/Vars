@@ -49,7 +49,7 @@ class vars::Vars {
   CLASS* reCreate(std::string const& n, ARGS&&... args);
 
  private:
-  void checkTypes(std::string const& n, std::type_info const& t) const;
+  VARS_EXPORT void checkTypes(std::string const& n, std::type_info const& t) const;
   friend class VarsImpl;
   std::unique_ptr<VarsImpl> impl;
 };
