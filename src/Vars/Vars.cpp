@@ -65,30 +65,23 @@ void Vars::erase(std::string const& n) { impl->erase(n); }
 
 bool Vars::has(std::string const& n) const { return impl->has(n); }
 
-void Vars::updateTicks(std::string const& n)
-{
-  auto& d = impl->data.at(n);
-  d->updateTicks();
-}
+void Vars::updateTicks(std::string const& n) { impl->updateTicks(n); }
 
-size_t Vars::getTicks(std::string const& n) const
-{
-  return impl->data.at(n)->getTicks();
-}
+size_t Vars::getTicks(std::string const& n) const { return impl->getTicks(n); }
 
 void Vars::setChangeCallback(std::string const& n, OnChange const& clb)
 {
-  impl->data.at(n)->setChangeCallback(clb);
+  impl->setChaneCallback(n, clb);
 }
 
 std::shared_ptr<vars::Resource> Vars::getResource(std::string const& n) const
 {
-  return impl->data.at(n);
+  return impl->getResource(n);
 }
 
-size_t Vars::getNofVars() const { return impl->data.size(); }
+size_t Vars::getNofVars() const { return impl->getNofVars(); }
 
-std::string Vars::getVarName(size_t i) const { return impl->idToName.at(i); }
+std::string Vars::getVarName(size_t i) const { return impl->getVarName(i); }
 
 std::type_info const& Vars::getType(std::string const& n) const
 {

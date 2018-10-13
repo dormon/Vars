@@ -4,6 +4,7 @@
 
 namespace vars {
 class VarsImpl;
+class Directory;
 class Vars;
 class Resource;
 
