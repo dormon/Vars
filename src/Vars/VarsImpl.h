@@ -12,11 +12,13 @@ class vars::Directory{
   public:
     void add(string const&fullPath);
     void remove(string const&fullPath);
+    void removeDir(string const&fullPath);
+    void removeVar(string const&fullPath);
     bool hasDir(string const&d)const;
     bool hasVar(string const&v)const;
     Directory&getDir(string const&d);
     Directory const&getDir(string const&d)const;
-    set<string>getVars()const;
+    set<string>getVars(string const&d = "")const;
     bool isDir(string const&fullPath)const;
     bool isVar(string const&fullPath)const;
     map<string,Directory>dirs;
@@ -31,6 +33,10 @@ class vars::VarsImpl {
             type_info const&  t);
 
   void             erase(string const& n);
+  void             eraseDir(string const& n);
+  void             eraseVar(string const& n);
+  bool             isDir(string const& n)const;
+  bool             isVar(string const& n)const;
   bool             has(string const& n) const;
   type_info const& getType(string const& n) const;
   void             checkTypes(string const& n, type_info const& t);

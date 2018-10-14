@@ -27,6 +27,10 @@ class vars::Vars {
   VARS_EXPORT float&       getFloat(std::string const& n) const;
   VARS_EXPORT uint32_t&    getUint32(std::string const& n) const;
   VARS_EXPORT void         erase(std::string const& n);
+  VARS_EXPORT void         eraseDir(std::string const& n);
+  VARS_EXPORT void         eraseVar(std::string const& n);
+  VARS_EXPORT bool         isDir(std::string const& n)const;
+  VARS_EXPORT bool         isVar(std::string const& n)const;
   VARS_EXPORT bool         has(std::string const& n) const;
   VARS_EXPORT void         updateTicks(std::string const& n);
   VARS_EXPORT size_t       getTicks(std::string const& n) const;

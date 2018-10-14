@@ -48,23 +48,49 @@ Directory const&Directory::getDir(string const&d)const{
   return dirs.at(d);
 }
 
-set<string>Directory::getVars()const{
+set<string>decorate(string const&dir,set<string>const&vars){
   set<string>result;
-  result = vars;
-  for(auto const&d:dirs){
-    auto subVars = d.second.getVars();
-    for(auto const&sv:subVars)
-      result.insert(d.first+"."+sv);
-  }
+  for(auto const&v:vars)
+    result.insert(dir+"."+v);
   return result;
+}
+
+void append(set<string>&target,set<string>const&vars){
+  for(auto const&v:vars)
+    target.insert(v);
+}
+
+set<string>Directory::getVars(string const&fullPath)const{
+  if(fullPath == ""){
+    set<string>result = vars;
+    for(auto const&d:dirs)
+      append(result,decorate(d.first,d.second.getVars()));
+    return result;
+  }
+
+  auto const split = splitPathToFirstDirAndRest(fullPath);
+  auto const&dir   = std::get<0>(split);
+  auto const&rest  = std::get<1>(split);
+
+  if(dir == ""){
+    if(!isDir(rest))return {};
+    return decorate(rest,getDir(rest).getVars());
+  }
+
+  if(!isDir(dir))return {};
+  return decorate(dir,getDir(dir).getVars(rest));
 }
 
 bool Directory::isDir(string const&fullPath)const{
   auto const split = splitPathToFirstDirAndRest(fullPath);
   auto const&dir  = std::get<0>(split);
   auto const&rest = std::get<1>(split);
+
   if(dir == "")
     return dirs.count(rest) > 0;
+
+  if(dirs.count(dir) == 0)return false;
+
   return dirs.at(dir).isDir(rest);
 }
 
@@ -72,21 +98,51 @@ bool Directory::isVar(string const&fullPath)const{
   auto const split = splitPathToFirstDirAndRest(fullPath);
   auto const&dir  = std::get<0>(split);
   auto const&rest = std::get<1>(split);
+
   if(dir == "")
-    return vars.count(rest);
+    return vars.count(rest) > 0;
+
+  if(dirs.count(dir) == 0)return false;
+
   return dirs.at(dir).isVar(rest);
 }
 
 void Directory::remove(string const&fullPath){
+  removeVar(fullPath);
+  removeDir(fullPath);
+}
+
+void Directory::removeDir(string const&fullPath){
   auto const split = splitPathToFirstDirAndRest(fullPath);
   auto const&dir  = std::get<0>(split);
   auto const&rest = std::get<1>(split);
+
   if(dir == ""){
-    vars.erase(rest);
     dirs.erase(rest);
     return;
   }
-  dirs.at(dir).remove(rest);
+
+  if(dirs.count(dir) == 0)return;
+
+  dirs.at(dir).removeDir(rest);
+}
+
+void Directory::removeVar(string const&fullPath){
+  auto const split = splitPathToFirstDirAndRest(fullPath);
+  auto const&dir  = std::get<0>(split);
+  auto const&rest = std::get<1>(split);
+
+  if(dir == ""){
+    vars.erase(rest);
+    return;
+  }
+
+  if(dirs.count(dir) == 0)return;
+
+  dirs.at(dir).removeVar(rest);
+
+  if(dirs.at(dir).vars.empty() && dirs.at(dir).dirs.empty())
+    dirs.erase(dir);
 }
 
 void* VarsImpl::add(string const&     n,
@@ -140,10 +196,32 @@ string VarsImpl::getVarName(size_t i)const{
 
 
 void VarsImpl::erase(string const& n) {
+  eraseVar(n);
+  eraseDir(n);
+}
+
+void VarsImpl::eraseDir(string const& n){
+  if(!isDir(n))return;
+  auto forRemoval = root.getVars(n);
+  for(auto const&r:forRemoval)
+    eraseVar(r);
+}
+
+void VarsImpl::eraseVar(string const& n){
+  if(!isVar(n))return;
   resources.erase(n);
-  auto id = nameToId[n];
+  auto id = nameToId.at(n);
   nameToId.erase(n);
   idToName.erase(id);
+  root.removeVar(n);
+}
+
+bool VarsImpl::isDir(string const& n)const{
+  return root.isDir(n);
+}
+
+bool VarsImpl::isVar(string const& n)const{
+  return root.isVar(n);
 }
 
 bool VarsImpl::has(string const& n) const { return resources.count(n) > 0; }

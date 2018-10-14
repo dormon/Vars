@@ -63,6 +63,14 @@ uint32_t& Vars::getUint32(std::string const& n) const
 
 void Vars::erase(std::string const& n) { impl->erase(n); }
 
+void Vars::eraseDir(std::string const& n) { impl->eraseDir(n); }
+
+void Vars::eraseVar(std::string const& n) { impl->eraseVar(n); }
+
+bool Vars::isDir(std::string const& n) const { return impl->isDir(n); }
+
+bool Vars::isVar(std::string const& n) const { return impl->isVar(n); }
+
 bool Vars::has(std::string const& n) const { return impl->has(n); }
 
 void Vars::updateTicks(std::string const& n) { impl->updateTicks(n); }
