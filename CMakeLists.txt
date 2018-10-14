@@ -10,9 +10,11 @@ set(SOURCES
   src/${PROJECT_NAME}/Vars.cpp
   src/${PROJECT_NAME}/VarsImpl.cpp
   src/${PROJECT_NAME}/Resource.cpp
+  src/${PROJECT_NAME}/Directory.cpp
   )
 set(PRIVATE_INCLUDES 
   src/${PROJECT_NAME}/VarsImpl.h
+  src/${PROJECT_NAME}/Directory.h
   )
 set(PUBLIC_INCLUDES 
   src/${PROJECT_NAME}/Fwd.h

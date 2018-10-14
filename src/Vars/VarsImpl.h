@@ -1,29 +1,10 @@
 #pragma once
 
 #include <Vars/Vars.h>
+#include <Vars/Directory.h>
 #include <map>
-#include <set>
-#include <vector>
-#include <tuple>
 
 using namespace std;
-
-class vars::Directory{
-  public:
-    void add(string const&fullPath);
-    void remove(string const&fullPath);
-    void removeDir(string const&fullPath);
-    void removeVar(string const&fullPath);
-    bool hasDir(string const&d)const;
-    bool hasVar(string const&v)const;
-    Directory&getDir(string const&d);
-    Directory const&getDir(string const&d)const;
-    set<string>getVars(string const&d = "")const;
-    bool isDir(string const&fullPath)const;
-    bool isVar(string const&fullPath)const;
-    map<string,Directory>dirs;
-    set<string>vars;
-};
 
 class vars::VarsImpl {
  public:
@@ -76,7 +57,3 @@ T& vars::VarsImpl::get(string const& n) const {
   return reinterpret_cast<T&>(*reinterpret_cast<T*>(get(n)));
 }
 
-//vector<tuple<string,string>>getAllSplits(string const&p);
-//void addDirectory(vars::Directory&root,string const&fullPath);
-//void removeDirectory(map<string,set<string>>&directories,string const&dirPath);
-//set<string>getAllSubDirs(map<string,set<string>>const&directories,string const&dir);
