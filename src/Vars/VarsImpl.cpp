@@ -101,6 +101,7 @@ bool VarsImpl::has(string const& n) const { return resources.count(n) > 0; }
 
 type_info const& VarsImpl::getType(string const& n) const
 {
+  ifVarDoesNotExistThrow(n);
   return resources.at(n)->getType();
 }
 

@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <typeinfo>
+#include <vector>
 
 #include <Vars/Fwd.h>
 #include <Vars/vars_export.h>
@@ -43,6 +44,13 @@ class vars::Vars {
                                      void*                 d,
                                      Destructor const&     dst,
                                      std::type_info const& t);
+
+  template<typename T,typename...ARGS>
+  std::vector<T>&addVector(std::string const&n,ARGS&&... args);
+  template<typename T>
+  std::vector<T>&getVector(std::string const&n);
+  template<typename T,typename...ARGS>
+  std::vector<T>&reCreateVector(std::string const&n, ARGS&&...args);
   template <typename CLASS, typename... ARGS>
   CLASS* add(std::string const& n, ARGS&&... args);
   template <typename CLASS>
@@ -57,6 +65,23 @@ class vars::Vars {
   friend class VarsImpl;
   std::unique_ptr<VarsImpl> impl;
 };
+
+
+template<typename T,typename...ARGS>
+std::vector<T>&vars::Vars::addVector(std::string const&n,ARGS&&... args){
+  auto r = add<std::vector<T>>(n,args...);
+  return *reinterpret_cast<std::vector<T>*>(r);
+}
+
+template<typename T>
+std::vector<T>&vars::Vars::getVector(std::string const&n){
+  return *get<std::vector<T>>(n);
+}
+
+template<typename T,typename...ARGS>
+std::vector<T>&vars::Vars::reCreateVector(std::string const&n, ARGS&&...args){
+  return *reCreate<std::vector<T>>(n,args...);
+}
 
 template <typename CLASS, typename... ARGS>
 CLASS* vars::Vars::add(std::string const& n, ARGS&&... args)

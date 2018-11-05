@@ -324,3 +324,49 @@ SCENARIO("Vars in child object, child object in vars, default destructor"){
 }
 
 
+
+SCENARIO("Vars test for non existing variable"){
+  Vars vars;
+  bool catchedError = false;
+  try{
+    vars.getBool("hi");
+  }catch(std::runtime_error&e){
+    catchedError = true;
+  }
+  REQUIRE(catchedError == true);
+
+  catchedError = false;
+  try{
+    vars.get<Object>("hi");
+  }catch(std::runtime_error&e){
+    catchedError = true;
+  }
+  REQUIRE(catchedError == true);
+
+}
+
+struct Vec3{
+  Vec3(float d){a[0]=a[1]=a[2]=d;}
+  float a[3];
+};
+
+SCENARIO("Vars - vector test"){
+  Vars vars;
+  auto&v=vars.addVector<float>("a");
+  REQUIRE(vars.has("a") == true);
+  v.push_back(1.f);
+  v.push_back(2.f);
+  auto&w=vars.reCreateVector<float>("a",10);
+  REQUIRE(w.size() == 10);
+  vars.erase("a");
+  REQUIRE(vars.has("a") == false);
+
+  auto&vv=vars.addVector<Vec3>("a");
+  vv.resize(10,Vec3(10.f));
+  REQUIRE(vv.at(9).a[0] == 10.f);
+  REQUIRE(vv.at(9).a[1] == 10.f);
+  REQUIRE(vv.at(9).a[2] == 10.f);
+
+
+
+}

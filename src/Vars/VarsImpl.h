@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Vars/Vars.h>
 #include <Vars/Directory.h>
+#include <Vars/Vars.h>
 #include <map>
 
 using namespace std;
@@ -16,27 +16,30 @@ class vars::VarsImpl {
   void             erase(string const& n);
   void             eraseDir(string const& n);
   void             eraseVar(string const& n);
-  bool             isDir(string const& n)const;
-  bool             isVar(string const& n)const;
+  bool             isDir(string const& n) const;
+  bool             isVar(string const& n) const;
   bool             has(string const& n) const;
   type_info const& getType(string const& n) const;
   void             checkTypes(string const& n, type_info const& t);
   void             ifVarExistsThrow(string const& n) const;
   void             ifVarDoesNotExistThrow(string const& n) const;
   ~VarsImpl();
-  void* get(string const& n) const;
-  void* reCreate(string const&n,void*d,Destructor const&dst,type_info const&t);
-  void updateTicks(string const&n);
-  size_t getTicks(string const&n)const;
-  void setChaneCallback(string const&n,OnChange const&clb);
-  shared_ptr<Resource>getResource(string const&n)const;
-  size_t getNofVars()const;
-  string getVarName(size_t i)const;
+  void*                get(string const& n) const;
+  void*                reCreate(string const&     n,
+                                void*             d,
+                                Destructor const& dst,
+                                type_info const&  t);
+  void                 updateTicks(string const& n);
+  size_t               getTicks(string const& n) const;
+  void                 setChaneCallback(string const& n, OnChange const& clb);
+  shared_ptr<Resource> getResource(string const& n) const;
+  size_t               getNofVars() const;
+  string               getVarName(size_t i) const;
 
   template <typename T>
   T& add(string const& n, T const& v);
   template <typename T>
-  T&                                get(string const& n) const;
+  T& get(string const& n) const;
 
  protected:
   map<string, shared_ptr<Resource>> resources;
@@ -46,14 +49,15 @@ class vars::VarsImpl {
 };
 
 template <typename T>
-T& vars::VarsImpl::add(string const& n, T const& v) {
+T& vars::VarsImpl::add(string const& n, T const& v)
+{
   auto d   = new T(v);
   auto dst = getDestructor<T>();
   return reinterpret_cast<T&>(*reinterpret_cast<T*>(add(n, d, dst, typeid(T))));
 }
 
 template <typename T>
-T& vars::VarsImpl::get(string const& n) const {
+T& vars::VarsImpl::get(string const& n) const
+{
   return reinterpret_cast<T&>(*reinterpret_cast<T*>(get(n)));
 }
-
