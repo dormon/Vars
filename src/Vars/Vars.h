@@ -44,6 +44,8 @@ class vars::Vars {
                                      void*                 d,
                                      Destructor const&     dst,
                                      std::type_info const& t);
+  VARS_EXPORT void pushCallerName(std::string const&n = "");
+  VARS_EXPORT void popCallerName();
 
   template<typename T,typename...ARGS>
   std::vector<T>&addVector(std::string const&n,ARGS&&... args);

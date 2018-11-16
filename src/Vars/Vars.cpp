@@ -104,6 +104,14 @@ void* Vars::reCreate(std::string const&    n,
   return impl->reCreate(n, d, dst, t);
 }
 
+void Vars::pushCallerName(std::string const&n){
+  impl->pushCallerName(n);
+}
+
+void Vars::popCallerName(){
+  impl->popCallerName();
+}
+
 void Vars::checkTypes(std::string const& n, std::type_info const& t) const
 {
   impl->checkTypes(n, t);

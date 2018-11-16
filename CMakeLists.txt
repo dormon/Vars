@@ -11,6 +11,7 @@ set(SOURCES
   src/${PROJECT_NAME}/VarsImpl.cpp
   src/${PROJECT_NAME}/Resource.cpp
   src/${PROJECT_NAME}/Directory.cpp
+  src/${PROJECT_NAME}/Caller.cpp
   )
 set(PRIVATE_INCLUDES 
   src/${PROJECT_NAME}/VarsImpl.h
@@ -20,6 +21,7 @@ set(PUBLIC_INCLUDES
   src/${PROJECT_NAME}/Fwd.h
   src/${PROJECT_NAME}/Vars.h
   src/${PROJECT_NAME}/Resource.h
+  src/${PROJECT_NAME}/Caller.h
   )
 set(INTERFACE_INCLUDES )
 

@@ -7,6 +7,7 @@ class VarsImpl;
 class Directory;
 class Vars;
 class Resource;
+class Caller;
 
 using Destructor = std::function<void(void*)>;
 using OnChange   = std::function<void()>;

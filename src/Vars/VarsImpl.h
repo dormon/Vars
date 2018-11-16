@@ -23,6 +23,7 @@ class vars::VarsImpl {
   void             checkTypes(string const& n, type_info const& t);
   void             ifVarExistsThrow(string const& n) const;
   void             ifVarDoesNotExistThrow(string const& n) const;
+  void             ifVarIdDoesNotExistThrow(size_t i) const;
   ~VarsImpl();
   void*                get(string const& n) const;
   void*                reCreate(string const&     n,
@@ -35,6 +36,9 @@ class vars::VarsImpl {
   shared_ptr<Resource> getResource(string const& n) const;
   size_t               getNofVars() const;
   string               getVarName(size_t i) const;
+  void                 pushCallerName(std::string const&n = "");
+  void                 popCallerName();
+  string               getFullCallerName()const;
 
   template <typename T>
   T& add(string const& n, T const& v);
@@ -42,6 +46,7 @@ class vars::VarsImpl {
   T& get(string const& n) const;
 
  protected:
+  std::vector<string>callerNames;
   map<string, shared_ptr<Resource>> resources;
   Directory                         root;
   map<size_t, string>               idToName;

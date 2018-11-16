@@ -10,6 +10,31 @@
 using namespace vars;
 using namespace std;
 
+SCENARIO("Simple directory"){
+  Directory root;
+  REQUIRE(root.getVars() == set<string>{});
+  root.add("aaa");
+  REQUIRE(root.vars == set<string>{"aaa"});
+  root.remove("aaa");
+  REQUIRE(root.getVars() == set<string>{});
+  root.add("a.b");
+  REQUIRE(root.vars == set<string>{});
+  REQUIRE(root.hasDir("a"));
+  REQUIRE(root.getDir("a").vars == set<string>{"b"});
+  root.removeDir("a");
+  REQUIRE(root.vars == set<string>{});
+  REQUIRE(!root.hasDir("a"));
+  root.add("a.b");
+  root.add("a");
+  REQUIRE(root.vars == set<string>{"a"});
+  REQUIRE(root.hasDir("a"));
+  REQUIRE(root.getDir("a").vars == set<string>{"b"});
+  root.remove("a");
+  REQUIRE(root.getVars() == set<string>{});
+  REQUIRE(!root.hasDir("a"));
+  REQUIRE(!root.hasVar("a"));
+}
+
 SCENARIO("Directory"){
   Directory root;
 
@@ -366,7 +391,49 @@ SCENARIO("Vars - vector test"){
   REQUIRE(vv.at(9).a[0] == 10.f);
   REQUIRE(vv.at(9).a[1] == 10.f);
   REQUIRE(vv.at(9).a[2] == 10.f);
-
-
-
 }
+
+bool exceptionCatcher(std::function<void()>const&f){
+  try{
+    f();
+  }catch(std::runtime_error&e){
+    return true;
+  }
+  return false;
+}
+
+SCENARIO("Vars - getVarName"){
+  Vars vars;
+  REQUIRE(exceptionCatcher([&](){vars.getVarName(0);}) == true);
+  vars.addBool("a");
+  REQUIRE(exceptionCatcher([&](){vars.getVarName(0);}) == false);
+  REQUIRE(vars.getVarName(0) == "a");
+  vars.addBool("b");
+  REQUIRE(vars.getVarName(1) == "b");
+  vars.addFloat("c");
+  REQUIRE(vars.getVarName(2) == "c");
+  vars.addUint32("b.a");
+  REQUIRE(vars.getVarName(3) == "b.a");
+  vars.erase("b");
+  REQUIRE(vars.getVarName(0) == "a");
+  REQUIRE(vars.getVarName(1) == "c");
+  REQUIRE(exceptionCatcher([&](){vars.getVarName(2);}) == true);
+}
+
+SCENARIO("Vars - getNofVars"){
+  Vars vars;
+  REQUIRE(vars.getNofVars() == 0);
+  vars.addBool("a");
+  REQUIRE(vars.getNofVars() == 1);
+  vars.addBool("b");
+  REQUIRE(vars.getNofVars() == 2);
+  vars.addFloat("c");
+  REQUIRE(vars.getNofVars() == 3);
+  vars.erase("a");
+  REQUIRE(vars.getNofVars() == 2);
+  vars.addUint32("b.a");
+  REQUIRE(vars.getNofVars() == 3);
+  vars.erase("b");
+  REQUIRE(vars.getNofVars() == 1);
+}
+

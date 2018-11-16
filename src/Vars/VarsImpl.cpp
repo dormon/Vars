@@ -1,19 +1,39 @@
 #include <Vars/Resource.h>
 #include <Vars/VarsImpl.h>
 #include <vector>
+#include <sstream>
 
 using namespace vars;
+
+string VarsImpl::getFullCallerName()const{
+  std::stringstream ss;
+
+  bool first = true;
+  for(auto const&x:callerNames){
+    if(first)first = false;
+    else ss << "::";
+    ss << x;
+  }
+
+  return ss.str();
+}
 
 void VarsImpl::ifVarExistsThrow(string const& n) const
 {
   if (!has(n)) return;
-  throw runtime_error(string("variable: ") + n + " already exists!");
+  std::stringstream ss;
+  ss << "Vars - in function: \"" << getFullCallerName() << "\" ";
+  ss << "variable: \"" << n << "\" already exists!";
+  throw runtime_error(ss.str());
 }
 
 void VarsImpl::ifVarDoesNotExistThrow(string const& n) const
 {
   if (has(n)) return;
-  throw runtime_error(string("variable: ") + n + " does not exist!");
+  std::stringstream ss;
+  ss << "Vars - in function: \"" << getFullCallerName() << "\" ";
+  ss << "variable: \"" << n << "\" does not exist!";
+  throw runtime_error(ss.str());
 }
 
 void* VarsImpl::add(string const&     n,
@@ -68,7 +88,28 @@ shared_ptr<Resource> VarsImpl::getResource(string const& n) const
 
 size_t VarsImpl::getNofVars() const { return resources.size(); }
 
-string VarsImpl::getVarName(size_t i) const { return idToName.at(i); }
+
+void VarsImpl::ifVarIdDoesNotExistThrow(size_t i) const{
+  if (idToName.count(i) > 0) return;
+  std::stringstream ss;
+  ss << "Vars - in function: \"" << getFullCallerName() << "\" ";
+  ss << "variable Id: \"" << i << "\" does not exist! ";
+  ss << "nofVariables: " << getNofVars() << std::endl;
+  throw runtime_error(ss.str());
+}
+
+string VarsImpl::getVarName(size_t i) const {
+  ifVarIdDoesNotExistThrow(i);
+  return idToName.at(i); 
+}
+
+void VarsImpl::pushCallerName(std::string const&n){
+  callerNames.push_back(n);
+}
+
+void VarsImpl::popCallerName(){
+  callerNames.pop_back();
+}
 
 void VarsImpl::erase(string const& n)
 {
@@ -83,14 +124,29 @@ void VarsImpl::eraseDir(string const& n)
   for (auto const& r : forRemoval) eraseVar(r);
 }
 
-void VarsImpl::eraseVar(string const& n)
+void VarsImpl::eraseVar(string const& nameToRemove)
 {
-  if (!isVar(n)) return;
-  resources.erase(n);
-  auto id = nameToId.at(n);
-  nameToId.erase(n);
-  idToName.erase(id);
-  root.removeVar(n);
+  if (!isVar(nameToRemove)) return;
+
+
+  auto idToRemove = nameToId.at(nameToRemove);
+  auto lastId     = nameToId.size()-1;
+  auto lastName   = idToName.at(lastId);
+
+  if(lastId != idToRemove){
+    nameToId.erase(nameToRemove);
+    idToName.erase(idToRemove);
+    nameToId.erase(lastName);
+    idToName.erase(lastId);
+    nameToId[lastName] = idToRemove;
+    idToName[idToRemove] = lastName;
+  }else{
+    nameToId.erase(nameToRemove);
+    idToName.erase(idToRemove);
+  }
+
+  resources.erase(nameToRemove);
+  root.removeVar(nameToRemove);
 }
 
 bool VarsImpl::isDir(string const& n) const { return root.isDir(n); }
@@ -108,7 +164,10 @@ type_info const& VarsImpl::getType(string const& n) const
 void VarsImpl::checkTypes(string const& n, type_info const& t)
 {
   if (getType(n) == t) return;
-  throw runtime_error(string("variable: ") + n + " has different type");
+  stringstream ss;
+  ss << "Vars - in function: \"" << getFullCallerName() << "\" ";
+  ss << "variable: \"" << n << "\" has different type";
+  throw runtime_error(ss.str());
 }
 
 VarsImpl::~VarsImpl()
