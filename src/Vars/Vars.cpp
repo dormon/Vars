@@ -12,88 +12,57 @@ void* Vars::add(std::string const&                n,
   return impl->add(n, d, dst, t);
 }
 
-bool& Vars::addBool(std::string const& n, bool v)
-{
-  return impl->add<bool>(n, v);
-}
-
-std::string& Vars::addString(std::string const& n, std::string const& v)
-{
-  return impl->add<std::string>(n, v);
-}
-
-size_t& Vars::addSizeT(std::string const& n, size_t v)
-{
-  return impl->add<size_t>(n, v);
-}
-
-float& Vars::addFloat(std::string const& n, float v)
-{
-  return impl->add<float>(n, v);
-}
-
-uint32_t& Vars::addUint32(std::string const& n, uint32_t v)
-{
-  return impl->add<uint32_t>(n, v);
-}
-
-int32_t& Vars::addInt32(std::string const& n, int32_t v)
-{
-  return impl->add<int32_t>(n, v);
-}
-
 void* Vars::get(std::string const& n) const { return impl->get(n); }
 
-std::string& Vars::getString(std::string const& n) const
-{
-  return impl->get<std::string>(n);
+#define IMPLEMENT_ADD_BASIC(name,type)\
+type& Vars::add##name(std::string const& n, type const& v)\
+{\
+  return impl->add<type>(n, v);\
 }
 
-bool& Vars::getBool(std::string const& n) const { return impl->get<bool>(n); }
+IMPLEMENT_ADD_BASIC(String,std::string)
+IMPLEMENT_ADD_BASIC(Float ,float      )
+IMPLEMENT_ADD_BASIC(SizeT ,size_t     )
+IMPLEMENT_ADD_BASIC(Uint32,uint32_t   )
+IMPLEMENT_ADD_BASIC(Int32 ,int32_t    )
+IMPLEMENT_ADD_BASIC(Uint16,uint16_t   )
+IMPLEMENT_ADD_BASIC(Int16 ,int16_t    )
+IMPLEMENT_ADD_BASIC(Uint8 ,uint8_t    )
+IMPLEMENT_ADD_BASIC(Int8  ,int8_t     )
+IMPLEMENT_ADD_BASIC(Bool  ,bool       )
 
-size_t& Vars::getSizeT(std::string const& n) const
-{
-  return impl->get<size_t>(n);
+#define IMPLEMENT_GET_BASIC(name,type)\
+type& Vars::get##name(std::string const& n) const\
+{\
+  return impl->get<type>(n);\
 }
 
-float& Vars::getFloat(std::string const& n) const
-{
-  return impl->get<float>(n);
+IMPLEMENT_GET_BASIC(String,std::string)
+IMPLEMENT_GET_BASIC(Float ,float      )
+IMPLEMENT_GET_BASIC(SizeT ,size_t     )
+IMPLEMENT_GET_BASIC(Uint32,uint32_t   )
+IMPLEMENT_GET_BASIC(Int32 ,int32_t    )
+IMPLEMENT_GET_BASIC(Uint16,uint16_t   )
+IMPLEMENT_GET_BASIC(Int16 ,int16_t    )
+IMPLEMENT_GET_BASIC(Uint8 ,uint8_t    )
+IMPLEMENT_GET_BASIC(Int8  ,int8_t     )
+IMPLEMENT_GET_BASIC(Bool  ,bool       )
+
+#define IMPLEMENT_ADD_OR_GET_BASIC(name,type)\
+type& Vars::addOrGet##name(std::string const& n, type const& v){\
+  return impl->addOrGet<type>(n,v);\
 }
 
-uint32_t& Vars::getUint32(std::string const& n) const
-{
-  return impl->get<uint32_t>(n);
-}
-
-int32_t& Vars::getInt32(std::string const& n) const
-{
-  return impl->get<int32_t>(n);
-}
-
-bool&        Vars::addOrGetBool(std::string const& n, bool v){
-  return impl->addOrGet<bool>(n,v);
-}
-
-std::string& Vars::addOrGetString(std::string const& n, std::string const& v){
-  return impl->addOrGet<std::string>(n,v);
-}
-
-size_t&      Vars::addOrGetSizeT(std::string const& n, size_t v){
-  return impl->addOrGet<size_t>(n,v);
-}
-
-float&       Vars::addOrGetFloat(std::string const& n, float v){
-  return impl->addOrGet<float>(n,v);
-}
-
-uint32_t&    Vars::addOrGetUint32(std::string const& n, uint32_t v){
-  return impl->addOrGet<uint32_t>(n,v);
-}
-
-int32_t&    Vars::addOrGetInt32(std::string const& n, int32_t v){
-  return impl->addOrGet<int32_t>(n,v);
-}
+IMPLEMENT_ADD_OR_GET_BASIC(String,std::string)
+IMPLEMENT_ADD_OR_GET_BASIC(Float ,float      )
+IMPLEMENT_ADD_OR_GET_BASIC(SizeT ,size_t     )
+IMPLEMENT_ADD_OR_GET_BASIC(Uint32,uint32_t   )
+IMPLEMENT_ADD_OR_GET_BASIC(Int32 ,int32_t    )
+IMPLEMENT_ADD_OR_GET_BASIC(Uint16,uint16_t   )
+IMPLEMENT_ADD_OR_GET_BASIC(Int16 ,int16_t    )
+IMPLEMENT_ADD_OR_GET_BASIC(Uint8 ,uint8_t    )
+IMPLEMENT_ADD_OR_GET_BASIC(Int8  ,int8_t     )
+IMPLEMENT_ADD_OR_GET_BASIC(Bool  ,bool       )
 
 void Vars::erase(std::string const& n) { impl->erase(n); }
 

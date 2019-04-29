@@ -16,35 +16,49 @@ class vars::Vars {
                                void*                 d,
                                Destructor const&     dst,
                                std::type_info const& t);
-  VARS_EXPORT bool&        addBool(std::string const& n, bool v = false);
-  VARS_EXPORT std::string& addString(std::string const& n, std::string const& v = "");
-  VARS_EXPORT size_t&      addSizeT(std::string const& n, size_t v = 0);
-  VARS_EXPORT float&       addFloat(std::string const& n, float v = 0.f);
-  VARS_EXPORT uint32_t&    addUint32(std::string const& n, uint32_t v = 0);
-  VARS_EXPORT int32_t&     addInt32(std::string const& n, int32_t v = 0);
   VARS_EXPORT void*        get(std::string const& n) const;
-  VARS_EXPORT std::string& getString(std::string const& n) const;
-  VARS_EXPORT bool&        getBool(std::string const& n) const;
-  VARS_EXPORT size_t&      getSizeT(std::string const& n) const;
-  VARS_EXPORT float&       getFloat(std::string const& n) const;
-  VARS_EXPORT uint32_t&    getUint32(std::string const& n) const;
-  VARS_EXPORT int32_t&     getInt32(std::string const& n) const;
 
-  VARS_EXPORT bool&        addOrGetBool(std::string const& n, bool v = false);
-  VARS_EXPORT std::string& addOrGetString(std::string const& n, std::string const& v = "");
-  VARS_EXPORT size_t&      addOrGetSizeT(std::string const& n, size_t v = 0);
-  VARS_EXPORT float&       addOrGetFloat(std::string const& n, float v = 0.f);
-  VARS_EXPORT uint32_t&    addOrGetUint32(std::string const& n, uint32_t v = 0);
-  VARS_EXPORT int32_t&     addOrGetInt32(std::string const& n, int32_t v = 0);
+  VARS_EXPORT std::string&addString(std::string const&n,std::string const&v=""   );
+  VARS_EXPORT       float&addFloat (std::string const&n,      float const&v=0.f  );
+  VARS_EXPORT      size_t&addSizeT (std::string const&n,     size_t const&v=0    );
+  VARS_EXPORT    uint32_t&addUint32(std::string const&n,   uint32_t const&v=0    );
+  VARS_EXPORT     int32_t&addInt32 (std::string const&n,    int32_t const&v=0    );
+  VARS_EXPORT    uint16_t&addUint16(std::string const&n,   uint16_t const&v=0    );
+  VARS_EXPORT     int16_t&addInt16 (std::string const&n,    int16_t const&v=0    );
+  VARS_EXPORT     uint8_t&addUint8 (std::string const&n,    uint8_t const&v=0    );
+  VARS_EXPORT      int8_t&addInt8  (std::string const&n,     int8_t const&v=0    );
+  VARS_EXPORT        bool&addBool  (std::string const&n,       bool const&v=false);
 
-  VARS_EXPORT void         erase(std::string const& n);
-  VARS_EXPORT void         eraseDir(std::string const& n);
-  VARS_EXPORT void         eraseVar(std::string const& n);
-  VARS_EXPORT bool         isDir(std::string const& n)const;
-  VARS_EXPORT bool         isVar(std::string const& n)const;
-  VARS_EXPORT bool         has(std::string const& n) const;
+  VARS_EXPORT std::string& getString(std::string const&n)const;
+  VARS_EXPORT       float& getFloat (std::string const&n)const;
+  VARS_EXPORT      size_t& getSizeT (std::string const&n)const;
+  VARS_EXPORT    uint32_t& getUint32(std::string const&n)const;
+  VARS_EXPORT     int32_t& getInt32 (std::string const&n)const;
+  VARS_EXPORT    uint16_t& getUint16(std::string const&n)const;
+  VARS_EXPORT     int16_t& getInt16 (std::string const&n)const;
+  VARS_EXPORT     uint8_t& getUint8 (std::string const&n)const;
+  VARS_EXPORT      int8_t& getInt8  (std::string const&n)const;
+  VARS_EXPORT        bool& getBool  (std::string const&n)const;
+
+  VARS_EXPORT std::string& addOrGetString(std::string const&n,std::string const&v=""   );
+  VARS_EXPORT float&       addOrGetFloat (std::string const&n,      float const&v=0.f  );
+  VARS_EXPORT size_t&      addOrGetSizeT (std::string const&n,     size_t const&v=0    );
+  VARS_EXPORT uint32_t&    addOrGetUint32(std::string const&n,   uint32_t const&v=0    );
+  VARS_EXPORT int32_t&     addOrGetInt32 (std::string const&n,    int32_t const&v=0    );
+  VARS_EXPORT uint16_t&    addOrGetUint16(std::string const&n,   uint16_t const&v=0    );
+  VARS_EXPORT int16_t&     addOrGetInt16 (std::string const&n,    int16_t const&v=0    );
+  VARS_EXPORT uint8_t&     addOrGetUint8 (std::string const&n,    uint8_t const&v=0    );
+  VARS_EXPORT int8_t&      addOrGetInt8  (std::string const&n,     int8_t const&v=0    );
+  VARS_EXPORT bool&        addOrGetBool  (std::string const&n,       bool const&v=false);
+
+  VARS_EXPORT void         erase      (std::string const& n);
+  VARS_EXPORT void         eraseDir   (std::string const& n);
+  VARS_EXPORT void         eraseVar   (std::string const& n);
+  VARS_EXPORT bool         isDir      (std::string const& n)const;
+  VARS_EXPORT bool         isVar      (std::string const& n)const;
+  VARS_EXPORT bool         has        (std::string const& n)const;
   VARS_EXPORT void         updateTicks(std::string const& n);
-  VARS_EXPORT size_t       getTicks(std::string const& n) const;
+  VARS_EXPORT size_t       getTicks   (std::string const& n)const;
   VARS_EXPORT void         setChangeCallback(std::string const& n, OnChange const& clb);
   VARS_EXPORT std::shared_ptr<Resource> getResource(std::string const& n) const;
   VARS_EXPORT size_t                    getNofVars() const;
