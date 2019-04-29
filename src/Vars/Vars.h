@@ -57,6 +57,8 @@ class vars::Vars {
   CLASS* add(std::string const& n, ARGS&&... args);
   template <typename CLASS>
   CLASS* get(std::string const& n) const;
+  template <typename CLASS,typename... ARGS>
+  CLASS* addOrGet(std::string const& n, ARGS&&... args);
   template <typename CLASS>
   CLASS* getReinterpret(std::string const& n) const;
   template <typename CLASS, typename... ARGS>
@@ -98,6 +100,13 @@ CLASS* vars::Vars::get(std::string const& n) const
 {
   checkTypes(n, typeid(CLASS));
   return reinterpret_cast<CLASS*>(get(n));
+}
+
+template <typename CLASS, typename... ARGS>
+CLASS* vars::Vars::addOrGet(std::string const& n, ARGS&&... args)
+{
+  if(has(n))return get<CLASS>(n);
+  return add<CLASS>(n,args...);
 }
 
 template <typename CLASS>

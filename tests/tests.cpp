@@ -437,3 +437,21 @@ SCENARIO("Vars - getNofVars"){
   REQUIRE(vars.getNofVars() == 1);
 }
 
+SCENARIO("Vars - addOrGet"){
+  Vars vars;
+  size_t constructorCalled = 0;
+  size_t destructorCalled = 0;
+  class A{
+    public:
+      A(size_t*cc,size_t*dd):c(cc),d(dd){(*c)++;}
+      ~A(){(*d)++;}
+      size_t*c;
+      size_t*d;
+  };
+  vars.addOrGet<A>("a",&constructorCalled,&destructorCalled);
+  REQUIRE(constructorCalled == 1);
+  REQUIRE(destructorCalled == 0);
+  vars.addOrGet<A>("a",&constructorCalled,&destructorCalled);
+  REQUIRE(constructorCalled == 1);
+  REQUIRE(destructorCalled == 0);
+}
