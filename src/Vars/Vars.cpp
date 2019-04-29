@@ -37,6 +37,11 @@ uint32_t& Vars::addUint32(std::string const& n, uint32_t v)
   return impl->add<uint32_t>(n, v);
 }
 
+int32_t& Vars::addInt32(std::string const& n, int32_t v)
+{
+  return impl->add<int32_t>(n, v);
+}
+
 void* Vars::get(std::string const& n) const { return impl->get(n); }
 
 std::string& Vars::getString(std::string const& n) const
@@ -61,6 +66,11 @@ uint32_t& Vars::getUint32(std::string const& n) const
   return impl->get<uint32_t>(n);
 }
 
+int32_t& Vars::getInt32(std::string const& n) const
+{
+  return impl->get<int32_t>(n);
+}
+
 bool&        Vars::addOrGetBool(std::string const& n, bool v){
   return impl->addOrGet<bool>(n,v);
 }
@@ -79,6 +89,10 @@ float&       Vars::addOrGetFloat(std::string const& n, float v){
 
 uint32_t&    Vars::addOrGetUint32(std::string const& n, uint32_t v){
   return impl->addOrGet<uint32_t>(n,v);
+}
+
+int32_t&    Vars::addOrGetInt32(std::string const& n, int32_t v){
+  return impl->addOrGet<int32_t>(n,v);
 }
 
 void Vars::erase(std::string const& n) { impl->erase(n); }

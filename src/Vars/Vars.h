@@ -21,18 +21,21 @@ class vars::Vars {
   VARS_EXPORT size_t&      addSizeT(std::string const& n, size_t v = 0);
   VARS_EXPORT float&       addFloat(std::string const& n, float v = 0.f);
   VARS_EXPORT uint32_t&    addUint32(std::string const& n, uint32_t v = 0);
+  VARS_EXPORT int32_t&     addInt32(std::string const& n, int32_t v = 0);
   VARS_EXPORT void*        get(std::string const& n) const;
   VARS_EXPORT std::string& getString(std::string const& n) const;
   VARS_EXPORT bool&        getBool(std::string const& n) const;
   VARS_EXPORT size_t&      getSizeT(std::string const& n) const;
   VARS_EXPORT float&       getFloat(std::string const& n) const;
   VARS_EXPORT uint32_t&    getUint32(std::string const& n) const;
+  VARS_EXPORT int32_t&     getInt32(std::string const& n) const;
 
   VARS_EXPORT bool&        addOrGetBool(std::string const& n, bool v = false);
   VARS_EXPORT std::string& addOrGetString(std::string const& n, std::string const& v = "");
   VARS_EXPORT size_t&      addOrGetSizeT(std::string const& n, size_t v = 0);
   VARS_EXPORT float&       addOrGetFloat(std::string const& n, float v = 0.f);
   VARS_EXPORT uint32_t&    addOrGetUint32(std::string const& n, uint32_t v = 0);
+  VARS_EXPORT int32_t&     addOrGetInt32(std::string const& n, int32_t v = 0);
 
   VARS_EXPORT void         erase(std::string const& n);
   VARS_EXPORT void         eraseDir(std::string const& n);
