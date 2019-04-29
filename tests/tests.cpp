@@ -454,4 +454,9 @@ SCENARIO("Vars - addOrGet"){
   vars.addOrGet<A>("a",&constructorCalled,&destructorCalled);
   REQUIRE(constructorCalled == 1);
   REQUIRE(destructorCalled == 0);
+
+  vars.addOrGetBool("check",true);
+  REQUIRE(vars.getBool("check") == true);
+  vars.addOrGetBool("check",false);
+  REQUIRE(vars.getBool("check") == true);
 }

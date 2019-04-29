@@ -61,6 +61,26 @@ uint32_t& Vars::getUint32(std::string const& n) const
   return impl->get<uint32_t>(n);
 }
 
+bool&        Vars::addOrGetBool(std::string const& n, bool v){
+  return impl->addOrGet<bool>(n,v);
+}
+
+std::string& Vars::addOrGetString(std::string const& n, std::string const& v){
+  return impl->addOrGet<std::string>(n,v);
+}
+
+size_t&      Vars::addOrGetSizeT(std::string const& n, size_t v){
+  return impl->addOrGet<size_t>(n,v);
+}
+
+float&       Vars::addOrGetFloat(std::string const& n, float v){
+  return impl->addOrGet<float>(n,v);
+}
+
+uint32_t&    Vars::addOrGetUint32(std::string const& n, uint32_t v){
+  return impl->addOrGet<uint32_t>(n,v);
+}
+
 void Vars::erase(std::string const& n) { impl->erase(n); }
 
 void Vars::eraseDir(std::string const& n) { impl->eraseDir(n); }

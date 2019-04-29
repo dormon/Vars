@@ -44,6 +44,9 @@ class vars::VarsImpl {
   T& add(string const& n, T const& v);
   template <typename T>
   T& get(string const& n) const;
+  template <typename T>
+  T& addOrGet(string const& n, T const& v);
+
 
  protected:
   std::vector<string>callerNames;
@@ -65,4 +68,10 @@ template <typename T>
 T& vars::VarsImpl::get(string const& n) const
 {
   return reinterpret_cast<T&>(*reinterpret_cast<T*>(get(n)));
+}
+
+template <typename T>
+T& vars::VarsImpl::addOrGet(string const& n, T const& v){
+  if(has(n))return get<T>(n);
+  return add<T>(n,v);
 }
