@@ -36,14 +36,15 @@ void VarsImpl::ifVarDoesNotExistThrow(string const& n) const
   throw runtime_error(ss.str());
 }
 
-void* VarsImpl::add(string const&     n,
-                    void*             d,
+void* VarsImpl::add(string const&     n  ,
+                    void*             d  ,
                     Destructor const& dst,
-                    type_info const&  t)
+                    type_info const&  t  ,
+                    ResourceKind      k  )
 {
   ifVarExistsThrow(n);
   auto id      = resources.size();
-  resources[n] = make_shared<Resource>(d, dst, t);
+  resources[n] = make_shared<Resource>(d, dst, t, k);
   idToName[id] = n;
   nameToId[n]  = id;
   root.add(n);
@@ -56,12 +57,13 @@ void* VarsImpl::get(string const& n) const
   return resources.at(n)->getData();
 }
 
-void* VarsImpl::reCreate(string const&     n,
-                         void*             d,
+void* VarsImpl::reCreate(string const&     n  ,
+                         void*             d  ,
                          Destructor const& dst,
-                         type_info const&  t)
+                         type_info const&  t  ,
+                         ResourceKind      k  )
 {
-  if (!has(n)) return add(n, d, dst, t);
+  if (!has(n)) return add(n, d, dst, t, k);
   return resources[n]->reCreate(d, dst, t);
 }
 
@@ -74,6 +76,11 @@ void VarsImpl::updateTicks(string const& n)
 size_t VarsImpl::getTicks(string const& n) const
 {
   return resources.at(n)->getTicks();
+}
+
+ResourceKind VarsImpl::getKind(string const& n) const
+{
+  return resources.at(n)->getKind();
 }
 
 void VarsImpl::setChaneCallback(string const& n, OnChange const& clb)

@@ -4,12 +4,13 @@
 
 using namespace vars;
 
-void* Vars::add(std::string const&                n,
-                void*                             d,
+void* Vars::add(std::string const&                n  ,
+                void*                             d  ,
                 std::function<void(void*)> const& dst,
-                std::type_info const&             t)
+                std::type_info const&             t  ,
+                ResourceKind                      k  )
 {
-  return impl->add(n, d, dst, t);
+  return impl->add(n, d, dst, t, k);
 }
 
 void* Vars::get(std::string const& n) const { return impl->get(n); }
@@ -17,7 +18,7 @@ void* Vars::get(std::string const& n) const { return impl->get(n); }
 #define IMPLEMENT_ADD_BASIC(name,type)\
 type& Vars::add##name(std::string const& n, type const& v)\
 {\
-  return impl->add<type>(n, v);\
+  return impl->add<type>(n, v, ResourceKind::BASIC);\
 }
 
 IMPLEMENT_ADD_BASIC(String,std::string)
@@ -50,7 +51,7 @@ IMPLEMENT_GET_BASIC(Bool  ,bool       )
 
 #define IMPLEMENT_ADD_OR_GET_BASIC(name,type)\
 type& Vars::addOrGet##name(std::string const& n, type const& v){\
-  return impl->addOrGet<type>(n,v);\
+  return impl->addOrGet<type>(n,v,ResourceKind::BASIC);\
 }
 
 IMPLEMENT_ADD_OR_GET_BASIC(String,std::string)
@@ -80,6 +81,8 @@ void Vars::updateTicks(std::string const& n) { impl->updateTicks(n); }
 
 size_t Vars::getTicks(std::string const& n) const { return impl->getTicks(n); }
 
+ResourceKind Vars::getKind    (std::string const& n)const{ return impl->getKind(n); }
+
 void Vars::setChangeCallback(std::string const& n, OnChange const& clb)
 {
   impl->setChaneCallback(n, clb);
@@ -99,12 +102,13 @@ std::type_info const& Vars::getType(std::string const& n) const
   return impl->getType(n);
 }
 
-void* Vars::reCreate(std::string const&    n,
-                     void*                 d,
+void* Vars::reCreate(std::string const&    n  ,
+                     void*                 d  ,
                      Destructor const&     dst,
-                     std::type_info const& t)
+                     std::type_info const& t  ,
+                     ResourceKind          k  )
 {
-  return impl->reCreate(n, d, dst, t);
+  return impl->reCreate(n, d, dst, t, k);
 }
 
 void Vars::pushCallerName(std::string const&n){

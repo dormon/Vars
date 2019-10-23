@@ -5,7 +5,7 @@
 
 class vars::Resource {
  public:
-  VARS_EXPORT Resource(void* d, Destructor const& dst, std::type_info const&t);
+  VARS_EXPORT Resource(void* d, Destructor const& dst, std::type_info const&t,ResourceKind kind);
   VARS_EXPORT ~Resource();
   VARS_EXPORT void                  updateTicks();
   VARS_EXPORT size_t                getTicks() const;
@@ -13,6 +13,7 @@ class vars::Resource {
   VARS_EXPORT void                  setChangeCallback(OnChange const& clb);
   VARS_EXPORT void*                 getData() const;
   VARS_EXPORT void*                 reCreate(void*d,Destructor const&dst,std::type_info const&t);
+  VARS_EXPORT ResourceKind          getKind()const;
 
  private:
   void*                 data;
@@ -20,4 +21,5 @@ class vars::Resource {
   OnChange              changeCallback = nullptr;
   Destructor            destructor;
   std::type_info const& type;
+  ResourceKind          kind;
 };

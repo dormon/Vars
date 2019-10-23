@@ -12,10 +12,11 @@ class vars::Vars {
  public:
   VARS_EXPORT Vars();
   VARS_EXPORT ~Vars();
-  VARS_EXPORT void*        add(std::string const&    n,
-                               void*                 d,
+  VARS_EXPORT void*        add(std::string const&    n  ,
+                               void*                 d  ,
                                Destructor const&     dst,
-                               std::type_info const& t);
+                               std::type_info const& t  ,
+                               ResourceKind          k  );
   VARS_EXPORT void*        get(std::string const& n) const;
 
   VARS_EXPORT std::string&addString(std::string const&n,std::string const&v=""   );
@@ -59,6 +60,7 @@ class vars::Vars {
   VARS_EXPORT bool         has        (std::string const& n)const;
   VARS_EXPORT void         updateTicks(std::string const& n);
   VARS_EXPORT size_t       getTicks   (std::string const& n)const;
+  VARS_EXPORT ResourceKind getKind    (std::string const& n)const;
   VARS_EXPORT void         setChangeCallback(std::string const& n, OnChange const& clb);
   VARS_EXPORT std::shared_ptr<Resource> getResource(std::string const& n) const;
   VARS_EXPORT size_t                    getNofVars() const;
@@ -67,7 +69,8 @@ class vars::Vars {
   VARS_EXPORT void*                     reCreate(std::string const&    n,
                                      void*                 d,
                                      Destructor const&     dst,
-                                     std::type_info const& t);
+                                     std::type_info const& t,
+                                     ResourceKind          k);
   VARS_EXPORT void pushCallerName(std::string const&n = "");
   VARS_EXPORT void popCallerName();
 
@@ -96,7 +99,13 @@ class vars::Vars {
 
   template<typename T>
   T&addOrGetEnum(std::string const&n,T v = static_cast<T>(0));
+
+  bool isEnum(std::string const&n)const;
  private:
+  template <ResourceKind KIND,typename CLASS, typename... ARGS>
+  CLASS* addKind(std::string const& n, ARGS&&... args);
+  template <ResourceKind KIND,typename CLASS,typename... ARGS>
+  CLASS* addOrGetKind(std::string const& n, ARGS&&... args);
   VARS_EXPORT void checkTypes(std::string const& n, std::type_info const& t) const;
   friend class VarsImpl;
   std::unique_ptr<VarsImpl> impl;
@@ -105,7 +114,7 @@ class vars::Vars {
 
 template<typename T,typename...ARGS>
 std::vector<T>&vars::Vars::addVector(std::string const&n,ARGS&&... args){
-  auto r = add<std::vector<T>>(n,args...);
+  auto r = addKind<ResourceKind::VECTOR,std::vector<T>>(n,args...);
   return *reinterpret_cast<std::vector<T>*>(r);
 }
 
@@ -119,13 +128,20 @@ std::vector<T>&vars::Vars::reCreateVector(std::string const&n, ARGS&&...args){
   return *reCreate<std::vector<T>>(n,args...);
 }
 
+template <vars::ResourceKind KIND,typename CLASS, typename... ARGS>
+CLASS* vars::Vars::addKind(std::string const& n, ARGS&&... args)
+{
+  void* data = new CLASS(args...);
+  auto  r    = add(n, data, getDestructor<CLASS>(), typeid(CLASS),KIND);
+  return reinterpret_cast<CLASS*>(r);
+}
+
 template <typename CLASS, typename... ARGS>
 CLASS* vars::Vars::add(std::string const& n, ARGS&&... args)
 {
-  void* data = new CLASS(args...);
-  auto  r    = add(n, data, getDestructor<CLASS>(), typeid(CLASS));
-  return reinterpret_cast<CLASS*>(r);
+  return addKind<ResourceKind::CLASS,CLASS>(n,args...);
 }
+
 
 template <typename CLASS>
 CLASS* vars::Vars::get(std::string const& n) const
@@ -134,11 +150,17 @@ CLASS* vars::Vars::get(std::string const& n) const
   return reinterpret_cast<CLASS*>(get(n));
 }
 
+template <vars::ResourceKind KIND,typename CLASS, typename... ARGS>
+CLASS* vars::Vars::addOrGetKind(std::string const& n, ARGS&&... args)
+{
+  if(has(n))return get<CLASS>(n);
+  return addKind<KIND,CLASS>(n,args...);
+}
+
 template <typename CLASS, typename... ARGS>
 CLASS* vars::Vars::addOrGet(std::string const& n, ARGS&&... args)
 {
-  if(has(n))return get<CLASS>(n);
-  return add<CLASS>(n,args...);
+  return addOrGetKind<ResourceKind::CLASS,CLASS>(n,args...);
 }
 
 template <typename CLASS>
@@ -151,13 +173,13 @@ template <typename CLASS, typename... ARGS>
 CLASS* vars::Vars::reCreate(std::string const& n, ARGS&&... args)
 {
   void* data = new CLASS(args...);
-  auto  r    = reCreate(n, data, getDestructor<CLASS>(), typeid(CLASS));
+  auto  r    = reCreate(n, data, getDestructor<CLASS>(), typeid(CLASS),ResourceKind::CLASS);
   return reinterpret_cast<CLASS*>(r);
 }
 
 template<typename T>
 T&vars::Vars::addEnum(std::string const&n,T v){
-  return *add<T>(n,v);
+  return *addKind<ResourceKind::ENUM,T>(n,v);
 }
 
 template<typename T>
@@ -167,7 +189,7 @@ T&vars::Vars::getEnum(std::string const&n)const{
 
 template<typename T>
 T&vars::Vars::addOrGetEnum(std::string const&n,T v){
-  return *addOrGet<T>(n,v);
+  return *addOrGet<ResourceKind::ENUM,T>(n,v);
 }
 
 template <typename T>

@@ -176,6 +176,8 @@ SCENARIO("Vars vs Dirs"){
   REQUIRE(vars.isVar("a") == true);
   REQUIRE(vars.isVar("a.a") == true);
   REQUIRE(vars.isDir("a.a") == false);
+  REQUIRE(vars.getKind("a") == ResourceKind::BASIC);
+  REQUIRE(vars.getKind("a.a") == ResourceKind::BASIC);
 }
 
 SCENARIO("Erase vars tests"){
@@ -272,16 +274,20 @@ SCENARIO("Recreate tests"){
   Vars vars;
   vars.addBool("var",false);
   REQUIRE(vars.getBool("var") == false);
+  REQUIRE(vars.getKind("var") == ResourceKind::BASIC);
   vars.reCreate<float>("var",1.3f);
   REQUIRE(vars.getTicks("var") == 2);
   REQUIRE(vars.getFloat("var") == 1.3f);
+  REQUIRE(vars.getKind("var") == ResourceKind::BASIC);
 }
 
 SCENARIO("Recreate tests, return value"){
   Vars vars;
-  auto ptr = vars.reCreate("a",(void*)17,[](void*){},typeid(float));
+  auto ptr = vars.reCreate("a",(void*)17,[](void*){},typeid(float),ResourceKind::BASIC);
   REQUIRE(ptr == (void*)17);
-  ptr = vars.reCreate("a",(void*)9223,[](void*){},typeid(float));
+  REQUIRE(vars.getKind("a") == ResourceKind::BASIC);
+  ptr = vars.reCreate("a",(void*)9223,[](void*){},typeid(float),ResourceKind::BASIC);
+  REQUIRE(vars.getKind("a") == ResourceKind::BASIC);
   REQUIRE(ptr == (void*)9223);
 }
 
@@ -300,6 +306,7 @@ class Object{
 SCENARIO("Custom object"){
   Vars vars;
   vars.add<Object>("obj",10);
+  REQUIRE(vars.getKind("obj") == ResourceKind::CLASS);
   vars.erase("obj");
 }
 
@@ -471,7 +478,9 @@ SCENARIO("Vars - enum"){
   vars.addEnum<E>("e",E_A);
   auto&v = vars.getEnum<E>("e");
   REQUIRE(v == E_A);
+  REQUIRE(vars.getKind("e") == ResourceKind::ENUM);
   vars.reCreate<E>("e",E_B);
   auto&w = vars.getEnum<E>("e");
   REQUIRE(w == E_B);
+  REQUIRE(vars.getKind("e") == ResourceKind::ENUM);
 }
