@@ -460,3 +460,18 @@ SCENARIO("Vars - addOrGet"){
   vars.addOrGetBool("check",false);
   REQUIRE(vars.getBool("check") == true);
 }
+
+SCENARIO("Vars - enum"){
+  Vars vars;
+  enum E{
+    E_A,
+    E_B,
+    E_C,
+  };
+  vars.addEnum<E>("e",E_A);
+  auto&v = vars.getEnum<E>("e");
+  REQUIRE(v == E_A);
+  vars.reCreate<E>("e",E_B);
+  auto&w = vars.getEnum<E>("e");
+  REQUIRE(w == E_B);
+}

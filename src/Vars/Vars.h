@@ -88,6 +88,14 @@ class vars::Vars {
   template <typename CLASS, typename... ARGS>
   CLASS* reCreate(std::string const& n, ARGS&&... args);
 
+  template<typename T>
+  T&addEnum(std::string const&n,T v = static_cast<T>(0));
+
+  template<typename T>
+  T&getEnum(std::string const&n)const;
+
+  template<typename T>
+  T&addOrGetEnum(std::string const&n,T v = static_cast<T>(0));
  private:
   VARS_EXPORT void checkTypes(std::string const& n, std::type_info const& t) const;
   friend class VarsImpl;
@@ -145,6 +153,21 @@ CLASS* vars::Vars::reCreate(std::string const& n, ARGS&&... args)
   void* data = new CLASS(args...);
   auto  r    = reCreate(n, data, getDestructor<CLASS>(), typeid(CLASS));
   return reinterpret_cast<CLASS*>(r);
+}
+
+template<typename T>
+T&vars::Vars::addEnum(std::string const&n,T v){
+  return *add<T>(n,v);
+}
+
+template<typename T>
+T&vars::Vars::getEnum(std::string const&n)const{
+  return *get<T>(n);
+}
+
+template<typename T>
+T&vars::Vars::addOrGetEnum(std::string const&n,T v){
+  return *addOrGet<T>(n,v);
 }
 
 template <typename T>
