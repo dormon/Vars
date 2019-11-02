@@ -4,6 +4,7 @@
 #include <string>
 #include <typeinfo>
 #include <vector>
+#include <map>
 
 #include <Vars/Fwd.h>
 #include <Vars/vars_export.h>
@@ -80,6 +81,14 @@ class vars::Vars {
   std::vector<T>&getVector(std::string const&n);
   template<typename T,typename...ARGS>
   std::vector<T>&reCreateVector(std::string const&n, ARGS&&...args);
+
+  template<typename K,typename V,typename...ARGS>
+  std::map<K,V>&addMap(std::string const&n,ARGS&&... args);
+  template<typename K,typename V>
+  std::map<K,V>&getMap(std::string const&n);
+  template<typename K,typename V,typename...ARGS>
+  std::map<V,K>&reCreateMap(std::string const&n, ARGS&&...args);
+
   template <typename CLASS, typename... ARGS>
   CLASS* add(std::string const& n, ARGS&&... args);
   template <typename CLASS>
@@ -126,6 +135,22 @@ std::vector<T>&vars::Vars::getVector(std::string const&n){
 template<typename T,typename...ARGS>
 std::vector<T>&vars::Vars::reCreateVector(std::string const&n, ARGS&&...args){
   return *reCreate<std::vector<T>>(n,args...);
+}
+
+template<typename K,typename V,typename...ARGS>
+std::map<K,V>&vars::Vars::addMap(std::string const&n,ARGS&&... args){
+  auto r = addKind<ResourceKind::MAP,std::map<K,V>>(n,args...);
+  return *reinterpret_cast<std::map<K,V>*>(r);
+}
+
+template<typename K,typename V>
+std::map<K,V>&vars::Vars::getMap(std::string const&n){
+  return *get<std::map<K,V>>(n);
+}
+
+template<typename K,typename V,typename...ARGS>
+std::map<V,K>&vars::Vars::reCreateMap(std::string const&n, ARGS&&...args){
+  return *reCreate<std::map<K,V>>(n,args...);
 }
 
 template <vars::ResourceKind KIND,typename CLASS, typename... ARGS>
