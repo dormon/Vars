@@ -54,7 +54,14 @@ void* VarsImpl::add(string const&     n  ,
 void* VarsImpl::get(string const& n) const
 {
   ifVarDoesNotExistThrow(n);
-  return resources.at(n)->getData();
+  return getNoCheck(n);
+}
+
+void* VarsImpl::getNoCheck(string const& n) const
+{
+  auto it = resources.find(n);
+  if(it == resources.end())return nullptr;
+  return it->second->getData();
 }
 
 void* VarsImpl::reCreate(string const&     n  ,

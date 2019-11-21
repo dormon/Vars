@@ -27,6 +27,7 @@ class vars::VarsImpl {
   void             ifVarIdDoesNotExistThrow(size_t i) const;
   ~VarsImpl();
   void*                get(string const& n) const;
+  void*                getNoCheck(string const& n)const;
   void*                reCreate(string const&     n  ,
                                 void*             d  ,
                                 Destructor const& dst,

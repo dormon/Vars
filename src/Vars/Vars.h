@@ -19,6 +19,7 @@ class vars::Vars {
                                std::type_info const& t  ,
                                ResourceKind          k  );
   VARS_EXPORT void*        get(std::string const& n) const;
+  VARS_EXPORT void*        getNoCheck(std::string const& n) const;
 
   VARS_EXPORT std::string&addString(std::string const&n,std::string const&v=""   );
   VARS_EXPORT       float&addFloat (std::string const&n,      float const&v=0.f  );

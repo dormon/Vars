@@ -14,6 +14,7 @@ void* Vars::add(std::string const&                n  ,
 }
 
 void* Vars::get(std::string const& n) const { return impl->get(n); }
+void* Vars::getNoCheck(std::string const& n) const { return impl->getNoCheck(n); }
 
 #define IMPLEMENT_ADD_BASIC(name,type)\
 type& Vars::add##name(std::string const& n, type const& v)\
