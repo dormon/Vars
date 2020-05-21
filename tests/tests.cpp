@@ -530,5 +530,10 @@ SCENARIO("Vars - is"){
   REQUIRE(vars.is<int16_t>("dir.a") == true);
   REQUIRE(vars.is<float >("dir.b") == true);
   REQUIRE(vars.is<std::string>("dir.dir.a") == true);
+  REQUIRE(vars.is<A>("dir.dir.b") == true);
 
+  REQUIRE(vars.isBool("a") == true);
+  REQUIRE(vars.isInt16("dir.a") == true);
+  REQUIRE(vars.isFloat("dir.b") == true);
+  REQUIRE(vars.isString("dir.dir.a") == true);
 }

@@ -54,6 +54,17 @@ class vars::Vars {
   VARS_EXPORT int8_t&      addOrGetInt8  (std::string const&n,     int8_t const&v=0    );
   VARS_EXPORT bool&        addOrGetBool  (std::string const&n,       bool const&v=false);
 
+  VARS_EXPORT bool isString(std::string const&n)const;
+  VARS_EXPORT bool isFloat (std::string const&n)const;
+  VARS_EXPORT bool isSizeT (std::string const&n)const;
+  VARS_EXPORT bool isUint32(std::string const&n)const;
+  VARS_EXPORT bool isInt32 (std::string const&n)const;
+  VARS_EXPORT bool isUint16(std::string const&n)const;
+  VARS_EXPORT bool isInt16 (std::string const&n)const;
+  VARS_EXPORT bool isUint8 (std::string const&n)const;
+  VARS_EXPORT bool isInt8  (std::string const&n)const;
+  VARS_EXPORT bool isBool  (std::string const&n)const;
+
   VARS_EXPORT void         erase      (std::string const& n);
   VARS_EXPORT void         eraseDir   (std::string const& n);
   VARS_EXPORT void         eraseVar   (std::string const& n);

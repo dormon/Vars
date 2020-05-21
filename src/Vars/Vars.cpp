@@ -66,6 +66,22 @@ IMPLEMENT_ADD_OR_GET_BASIC(Uint8 ,uint8_t    )
 IMPLEMENT_ADD_OR_GET_BASIC(Int8  ,int8_t     )
 IMPLEMENT_ADD_OR_GET_BASIC(Bool  ,bool       )
 
+#define IMPLEMENT_IS(name,type)\
+bool Vars::is##name(std::string const& n)const{\
+  return is<type>(n);\
+}
+
+IMPLEMENT_IS(String,std::string)
+IMPLEMENT_IS(Float ,float      )
+IMPLEMENT_IS(SizeT ,size_t     )
+IMPLEMENT_IS(Uint32,uint32_t   )
+IMPLEMENT_IS(Int32 ,int32_t    )
+IMPLEMENT_IS(Uint16,uint16_t   )
+IMPLEMENT_IS(Int16 ,int16_t    )
+IMPLEMENT_IS(Uint8 ,uint8_t    )
+IMPLEMENT_IS(Int8  ,int8_t     )
+IMPLEMENT_IS(Bool  ,bool       )
+
 void Vars::erase(std::string const& n) { impl->erase(n); }
 
 void Vars::eraseDir(std::string const& n) { impl->eraseDir(n); }
