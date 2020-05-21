@@ -113,6 +113,10 @@ class vars::Vars {
   T&addOrGetEnum(std::string const&n,T v = static_cast<T>(0));
 
   bool isEnum(std::string const&n)const;
+
+  template<typename T>
+  bool is(std::string const&n)const;
+
  private:
   template <ResourceKind KIND,typename CLASS, typename... ARGS>
   CLASS* addKind(std::string const& n, ARGS&&... args);
@@ -218,6 +222,12 @@ T&vars::Vars::getEnum(std::string const&n)const{
 template<typename T>
 T&vars::Vars::addOrGetEnum(std::string const&n,T v){
   return *addOrGet<ResourceKind::ENUM,T>(n,v);
+}
+
+
+template<typename T>
+bool vars::Vars::is(std::string const&n)const{
+  return getType(n) == typeid(T);
 }
 
 template <typename T>

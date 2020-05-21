@@ -515,3 +515,20 @@ SCENARIO("Vars - getDir"){
   snames = vector2Set(names);
   REQUIRE(snames == std::set<std::string>{});
 }
+
+SCENARIO("Vars - is"){
+  Vars vars;
+  vars.addBool("a");
+  vars.addInt16("dir.a");
+  vars.addFloat("dir.b");
+  vars.addString("dir.dir.a");
+
+  struct A{float a;};
+  vars.add<A>("dir.dir.b");
+
+  REQUIRE(vars.is<bool>("a") == true);
+  REQUIRE(vars.is<int16_t>("dir.a") == true);
+  REQUIRE(vars.is<float >("dir.b") == true);
+  REQUIRE(vars.is<std::string>("dir.dir.a") == true);
+
+}
