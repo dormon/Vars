@@ -499,21 +499,32 @@ SCENARIO("Vars - getDir"){
   vars.addBool("dir.b");
   vars.addBool("dir.dir.a");
   vars.addBool("dir.dir.b");
+  std::vector<std::string>fullNames;
   std::vector<std::string>names;
-  std::set<std::string>snames;
+  std::set<std::string>sFullNames;
+  std::set<std::string>sNames;
 
+  vars.getDirFullNames(fullNames,"dir");
+  sFullNames = vector2Set(fullNames);
   vars.getDir(names,"dir");
-  snames = vector2Set(names);
-  REQUIRE(snames == std::set<std::string>{"dir.a","dir.b","dir.dir.a","dir.dir.b"});
+  sNames = vector2Set(names);
+  REQUIRE(sFullNames == std::set<std::string>{"dir.a","dir.b","dir.dir.a","dir.dir.b"});
+  REQUIRE(sNames == std::set<std::string>{"a","b","dir.a","dir.b"});
 
+  vars.getDirFullNames(fullNames,"dir.dir");
+  sFullNames = vector2Set(fullNames);
   vars.getDir(names,"dir.dir");
-  snames = vector2Set(names);
-  REQUIRE(snames == std::set<std::string>{"dir.dir.a","dir.dir.b"});
+  sNames = vector2Set(names);
+  REQUIRE(sFullNames == std::set<std::string>{"dir.dir.a","dir.dir.b"});
+  REQUIRE(sNames == std::set<std::string>{"a","b"});
 
   vars.erase("dir");
+  vars.getDirFullNames(fullNames,"dir");
+  sFullNames = vector2Set(fullNames);
   vars.getDir(names,"dir");
-  snames = vector2Set(names);
-  REQUIRE(snames == std::set<std::string>{});
+  sNames = vector2Set(names);
+  REQUIRE(sFullNames == std::set<std::string>{});
+  REQUIRE(sNames == std::set<std::string>{});
 }
 
 SCENARIO("Vars - is"){

@@ -18,6 +18,7 @@ class vars::VarsImpl {
   void             eraseDir(string const& n);
   void             eraseVar(string const& n);
   bool             isDir(string const& n) const;
+  void             getDirFullNames(std::vector<std::string>&names,std::string const&n)const;
   void             getDir(std::vector<std::string>&names,std::string const&n)const;
   bool             isVar(string const& n) const;
   bool             has(string const& n) const;

@@ -165,12 +165,21 @@ void VarsImpl::eraseVar(string const& nameToRemove)
 
 bool VarsImpl::isDir(string const& n) const { return root.isDir(n); }
 
-void VarsImpl::getDir(std::vector<std::string>&names,std::string const&n)const{
+void VarsImpl::getDirFullNames(std::vector<std::string>&names,std::string const&n)const{
   names.clear();
   if(!isDir(n))return;
   auto vars = root.getVars(n);
   for(auto const&v:vars)
     names.push_back(v);
+}
+
+void VarsImpl::getDir(std::vector<std::string>&names,std::string const&n)const{
+  names.clear();
+  if(!isDir(n))return;
+  auto vars = root.getVars(n);
+  size_t const dirSeparatorSize = 1;
+  for(auto const&v:vars)
+    names.push_back(v.substr(n.size()+dirSeparatorSize));
 }
 
 bool VarsImpl::isVar(string const& n) const { return root.isVar(n); }
