@@ -485,6 +485,12 @@ SCENARIO("Vars - enum"){
   REQUIRE(vars.getKind("e") == ResourceKind::ENUM);
 }
 
+std::set<std::string>vector2Set(std::vector<std::string>const&vv){
+  std::set<std::string>rr;
+  for(auto const&n:vv)
+    rr.insert(n);
+  return rr;
+}
 
 SCENARIO("Vars - getDir"){
   Vars vars;
@@ -494,10 +500,18 @@ SCENARIO("Vars - getDir"){
   vars.addBool("dir.dir.a");
   vars.addBool("dir.dir.b");
   std::vector<std::string>names;
-  vars.getDir(names,"dir");
   std::set<std::string>snames;
-  for(auto const&n:names)
-    snames.insert(n);
 
+  vars.getDir(names,"dir");
+  snames = vector2Set(names);
   REQUIRE(snames == std::set<std::string>{"dir.a","dir.b","dir.dir.a","dir.dir.b"});
+
+  vars.getDir(names,"dir.dir");
+  snames = vector2Set(names);
+  REQUIRE(snames == std::set<std::string>{"dir.dir.a","dir.dir.b"});
+
+  vars.erase("dir");
+  vars.getDir(names,"dir");
+  snames = vector2Set(names);
+  REQUIRE(snames == std::set<std::string>{});
 }
