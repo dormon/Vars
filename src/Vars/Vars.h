@@ -58,6 +58,7 @@ class vars::Vars {
   VARS_EXPORT void         eraseDir   (std::string const& n);
   VARS_EXPORT void         eraseVar   (std::string const& n);
   VARS_EXPORT bool         isDir      (std::string const& n)const;
+  VARS_EXPORT void         getDir     (std::vector<std::string>&names,std::string const&dirName)const;
   VARS_EXPORT bool         isVar      (std::string const& n)const;
   VARS_EXPORT bool         has        (std::string const& n)const;
   VARS_EXPORT void         updateTicks(std::string const& n);
@@ -75,6 +76,7 @@ class vars::Vars {
                                      ResourceKind          k);
   VARS_EXPORT void pushCallerName(std::string const&n = "");
   VARS_EXPORT void popCallerName();
+
 
   template<typename T,typename...ARGS>
   std::vector<T>&addVector(std::string const&n,ARGS&&... args);

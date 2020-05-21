@@ -484,3 +484,20 @@ SCENARIO("Vars - enum"){
   REQUIRE(w == E_B);
   REQUIRE(vars.getKind("e") == ResourceKind::ENUM);
 }
+
+
+SCENARIO("Vars - getDir"){
+  Vars vars;
+  vars.addBool("a");
+  vars.addBool("dir.a");
+  vars.addBool("dir.b");
+  vars.addBool("dir.dir.a");
+  vars.addBool("dir.dir.b");
+  std::vector<std::string>names;
+  vars.getDir(names,"dir");
+  std::set<std::string>snames;
+  for(auto const&n:names)
+    snames.insert(n);
+
+  REQUIRE(snames == std::set<std::string>{"dir.a","dir.b","dir.dir.a","dir.dir.b"});
+}

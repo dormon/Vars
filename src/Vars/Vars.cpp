@@ -74,6 +74,10 @@ void Vars::eraseVar(std::string const& n) { impl->eraseVar(n); }
 
 bool Vars::isDir(std::string const& n) const { return impl->isDir(n); }
 
+void Vars::getDir(std::vector<std::string>&names,std::string const&dirName)const{
+  impl->getDir(names,dirName);
+}
+
 bool Vars::isVar(std::string const& n) const { return impl->isVar(n); }
 
 bool Vars::has(std::string const& n) const { return impl->has(n); }

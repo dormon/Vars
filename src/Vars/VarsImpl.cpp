@@ -165,6 +165,14 @@ void VarsImpl::eraseVar(string const& nameToRemove)
 
 bool VarsImpl::isDir(string const& n) const { return root.isDir(n); }
 
+void VarsImpl::getDir(std::vector<std::string>&names,std::string const&n)const{
+  names.clear();
+  if(!isDir(n))return;
+  auto vars = root.getVars(n);
+  for(auto const&v:vars)
+    names.push_back(v);
+}
+
 bool VarsImpl::isVar(string const& n) const { return root.isVar(n); }
 
 bool VarsImpl::has(string const& n) const { return resources.count(n) > 0; }
