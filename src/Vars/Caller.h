@@ -2,6 +2,7 @@
 
 #include <Vars/Fwd.h>
 #include <Vars/vars_export.h>
+#include <string>
 
 class vars::Caller{
   public:
